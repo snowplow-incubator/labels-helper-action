@@ -2,6 +2,8 @@
 
 Keep track of your progress towards a release by automatically labelling issues with their status. It works because of the strict release process workflow - the issue number is always present somewhere.
 
+This action was created during Hackathon July 2022, for internal Snowplow use.
+
 ## Using the Action
 Add a workflow like this to your repo (in `.github/workflows`):
 
@@ -30,15 +32,31 @@ jobs:
 ```
 
 ## What happens if the workflow is triggered?
+Example issue:  
+
+![new issue](public/1_new_issue.png)
+
 ### On `create`
-The workflow will be triggered when a branch or tag is created. If it's a branch called e.g. `issue/123-doing_some_work`, the Action will label issue #123 with `status:in_progress`.
+The workflow will be triggered when a branch or tag is created. If it's a branch called e.g. `issue/91-demo_labels_action`, the Action will label issue #91 with `status:in_progress`.  
+
+![in progress](public/2_issue_in_progress.png)
 
 ### On `pull_request`
-The workflow will be triggered when a PR is opened. If the PR is opened from e.g. `issue/123-doing_some_work`, the Action will label issue #123 with `status:has_pr`.
+The workflow will be triggered when a PR is opened. If the PR is opened from e.g. `issue/91-demo_labels_action`, the Action will label issue #91 with `status:has_pr`.  
+
+![has pr](public/3_issue_has_pr.png)
 
 ### On `push` to `release/` branch
-The workflow will be triggered when a commit is pushed to a release branch e.g. `release/1.0.1`. If the commit message has the expected structure - e.g. "Did some work (close #123)" - the Action will remove the `status:in_progress` and `status:has_pr` labels from issue #123, and add `status:completed`.
+The workflow will be triggered when a commit is pushed to a release branch e.g. `release/1.0.1`. If the commit message has the expected structure - e.g. "Demonstrate Labels Helper Action (close #91)" - the Action will remove the `status:in_progress` and `status:has_pr` labels from issue #91, and add `status:completed`.  
 
-## Example
-An example of some similar but manually added labels. Keeping track of progress towards the Java tracker v1.0.0 milestone with status labels:
-![Java tracker v1.0.0 milestone](java_issues_labels.png)
+![completed](public/4_issue_completed.png)
+
+### If it's triggered by something irrelevant
+The action will just end without doing anything - it won't throw an error, it will still have a green tick.
+
+The action will be triggered by things like tag creation, or PRs from release branches into main. In this case, the Github ref or commit messages won't be in the right structure or contain issue numbers.
+
+## Labels not green?
+The Snowplow tracker repos have standardised label sets. Check them out e.g [JavaScript](https://github.com/snowplow/snowplow-javascript-tracker/labels) tracker or [Python](https://github.com/snowplow/snowplow-python-tracker/labels) tracker. The labels and their colours are described [here](https://github.com/snowplow-incubator/data-value-resources/blob/main/20%20Style/GH_issue_labels.md) in the Data Value Resouces repo. You can also read there how to copy labels from one repo to another.
+
+
