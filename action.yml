@@ -1,0 +1,5 @@
+name: "Labels Helper"
+description: "Add the appropriate labels to Github issues."
+runs:
+  using: "node16"
+  main: "index.js"
