@@ -8,25 +8,27 @@ This action was created during Hackathon July 2022, for internal Snowplow use.
 Add a workflow like this to your repo (in `.github/workflows`):
 
 ```yaml
-name: "Labels"
+name: "Admin"
 on:
   create:
   pull_request:
     types:
       - opened
+    branches:
+      - 'release/**'
   push:
     branches:
       - "release/**"
 
 jobs:
-  labels:
+  update-labels:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Update issue status labels
-        uses: mscwilson/labels-helper-action@main
+        uses: snowplow-incubator/labels-helper-action@v1
         env:
           ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -42,7 +44,7 @@ The workflow will be triggered when a branch or tag is created. If it's a branch
 ![in progress](public/2_issue_in_progress.png)
 
 ### On `pull_request`
-The workflow will be triggered when a PR is opened. If the PR is opened from e.g. `issue/91-demo_labels_action`, the Action will label issue #91 with `status:has_pr`.  
+The workflow will be triggered when a pull request is opened. If the PR is opened from (the head branch) e.g. `issue/91-demo_labels_action`, the Action will label issue #91 with `status:has_pr`.  
 
 ![has pr](public/3_issue_has_pr.png)
 
@@ -54,9 +56,9 @@ The workflow will be triggered when a commit is pushed to a release branch e.g. 
 ### If it's triggered by something irrelevant
 The action will just end without doing anything - it won't throw an error, it will still have a green tick.
 
-The action will be triggered by things like tag creation, or PRs from release branches into main. In this case, the Github ref or commit messages won't be in the right structure or contain issue numbers.
+Using the workflow above, this action will be still triggered by tag creation, or commits into the release branch such as "Prepare for release". In this case, the Github ref or commit messages won't be in the right structure or contain issue numbers.
 
-## Labels not green?
-The Snowplow tracker repos have standardised label sets. Check them out e.g [JavaScript](https://github.com/snowplow/snowplow-javascript-tracker/labels) tracker or [Python](https://github.com/snowplow/snowplow-python-tracker/labels) tracker. The labels and their colours are described [here](https://github.com/snowplow-incubator/data-value-resources/blob/main/20%20Style/GH_issue_labels.md) in the Data Value Resouces repo. You can also read there how to copy labels from one repo to another.
+## Labels grey, not green?
+The Snowplow tracker repos have standardised label sets. Check them out e.g [JavaScript](https://github.com/snowplow/snowplow-javascript-tracker/labels) tracker or [Python](https://github.com/snowplow/snowplow-python-tracker/labels) tracker. The labels and their colours are described [here](https://github.com/snowplow-incubator/data-value-resources/blob/main/20%20Style/GH_issue_labels.md) in the Data Value Resouces repo (or on [Confluence](https://snplow.atlassian.net/wiki/spaces/DVR/pages/2767126529/GitHub+issue+labels)). You can also read there how to copy labels from one repo to another.
 
 
