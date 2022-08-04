@@ -1,5 +1,4 @@
 require("dotenv").config();
-const core = require("@actions/core");
 const github = require("@actions/github");
 
 const commitRegex = /^([\w\s.,'"-:`@]+) \((?:close|closes|fixes|fix) \#(\d+)\)/;
