@@ -62,3 +62,43 @@ Using the workflow above, this action will be still triggered by tag creation, o
 The Snowplow tracker repos have standardised label sets. Check them out e.g [JavaScript](https://github.com/snowplow/snowplow-javascript-tracker/labels) tracker or [Python](https://github.com/snowplow/snowplow-python-tracker/labels) tracker. The labels and their colours are described [here](https://github.com/snowplow-incubator/data-value-resources/blob/main/20%20Style/GH_issue_labels.md) in the Data Value Resouces repo (or on [Confluence](https://snplow.atlassian.net/wiki/spaces/DVR/pages/2767126529/GitHub+issue+labels)). You can also read there how to copy labels from one repo to another.
 
 
+## Using the Labels Helper and Pull Request Helper actions together
+The [Pull Request Helper Action](https://github.com/snowplow-incubator/pull-request-helper-action) renames a pull request based on its issue, and comments to link the issue. Use them in one workflow like this:
+
+```yaml
+name: "Admin"
+on:
+  create:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - "release/**"
+  push:
+    branches:
+      - "release/**"
+
+jobs:
+  update-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Update issue status labels
+        uses: snowplow-incubator/labels-helper-action@v1
+        env:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  link-pr-issue:
+    runs-on: ubuntu-latest
+    if: github.event_name == "pull_request"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Match the issue to the PR
+        uses: snowplow-incubator/pull-request-helper-action@v1
+        env:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
