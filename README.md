@@ -92,7 +92,7 @@ jobs:
 
   link-pr-issue:
     runs-on: ubuntu-latest
-    if: github.event_name == "pull_request"
+    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
